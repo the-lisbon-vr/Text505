@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: c15b938bd4b3b684e9a3f22b3bd45a65
+timeCreated: 1498235933
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Veteran Typewriter
+  fontNames:
+  - Veteran Typewriter
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
