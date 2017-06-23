@@ -13,6 +13,10 @@ public class TextController : MonoBehaviour {
 	};
 	private States myState;
 	private LevelManager levelManager;
+
+	private bool canTakeMirror;
+	private bool hasMirror;
+	private bool hasUnlockedDoor;
 //	public GameObject textGameObject;
 
 	// Use this for initialization
@@ -104,6 +108,43 @@ public class TextController : MonoBehaviour {
 		}						
 	}
 
+	public void CellViewSheets(){
+		myState = States.sheet_0;
+		print (myState);
+	}
+	public void CellViewLock(){
+		if(hasUnlockedDoor == true){
+			myState = States.corridor_0;
+			print (myState);
+			levelManager.LoadNextLevel ();
+		}
+		else if (hasMirror == true){
+			myState = States.lock_1;
+			print (myState);
+			hasUnlockedDoor = true;
+		} else {
+			myState = States.lock_0;
+			print (myState);
+		}
+	}
+	public void CellViewMirror(){
+		if(canTakeMirror == true){
+			myState = States.cell_mirror;
+			print (myState);
+			hasMirror = true;
+		}
+		else {
+			myState = States.mirror;
+			print (myState);
+			canTakeMirror = true;
+		}
+	}
+	public void CellReturnToCenter(){
+		myState = States.cell;
+		print (myState);
+	}
+
+
 	void sheet_0(){
 		text.text = "You can't believe you sleep in these things. Surely it's " +
 			"time somebody changed them. The pleasures of prison life " +
@@ -140,6 +181,7 @@ public class TextController : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.T)){
 			myState = States.cell_mirror;
 			print (myState);
+			hasMirror = true;
 		}					
 	}
 
