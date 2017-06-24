@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class TextController : MonoBehaviour {
 
@@ -17,12 +18,25 @@ public class TextController : MonoBehaviour {
 	private bool canTakeMirror;
 	private bool hasMirror;
 	private bool hasUnlockedDoor;
+	private bool isCloseToHairpin;
+	private bool isCloseToCloset;
+	private bool hasHairpin;
+	private bool hasOpenedCloset;
 //	public GameObject textGameObject;
 
 	// Use this for initialization
 	void Start () {
-		myState = States.cell;
-		print(myState);
+		//		set initial state for each scene (scene 01 takes the first in the enum States):
+		if (SceneManager.GetActiveScene().buildIndex == 2){
+			print ("scene index: " + SceneManager.GetActiveScene ().buildIndex);
+			myState = States.corridor_0;
+		}
+		if (SceneManager.GetActiveScene().buildIndex == 3){
+			print ("scene index: " + SceneManager.GetActiveScene ().buildIndex);
+			myState = States.corridor_3;
+		}
+
+		print("state in start: " + myState);
 		levelManager = Object.FindObjectOfType<LevelManager> ();
 	}
 
@@ -236,17 +250,77 @@ public class TextController : MonoBehaviour {
 			"Press S to view stairs, F to view floor and C to view closet.";
 
 		if (Input.GetKeyDown(KeyCode.S)){
+			CorridorViewStairs ();
+		}
+		if (Input.GetKeyDown(KeyCode.F)){
+			CorridorViewFloor ();
+		}					
+		if (Input.GetKeyDown(KeyCode.C)){
+			CorridorViewCloset ();
+		}					
+
+	}
+
+	public void CorridorViewStairs(){
+		if (myState == States.corridor_3){
+			myState = States.freedom;
+			print (myState);
+		}
+		else if(hasOpenedCloset){
+			myState = States.stairs_2;
+			print (myState);
+		}
+		else if(hasHairpin){
+			myState = States.stairs_1;
+			print (myState);
+		}
+		else {
 			myState = States.stairs_0;
 			print (myState);
 		}
-		if (Input.GetKeyDown(KeyCode.F)){
+
+	}
+	public void CorridorViewFloor(){
+		if(isCloseToHairpin){
+			myState = States.corridor_1;
+			print (myState);
+			hasHairpin = true;
+		} else {
 			myState = States.floor;
 			print (myState);
-		}					
-		if (Input.GetKeyDown(KeyCode.C)){
+			isCloseToHairpin = true;
+		}
+	}
+	public void CorridorViewCloset(){
+		if(hasOpenedCloset){
+			myState = States.corridor_3;
+			print (myState);
+			levelManager.LoadNextLevel ();
+		}
+		else if (isCloseToCloset && hasHairpin){
+			myState = States.in_closet;
+			print (myState);
+			hasOpenedCloset = true;
+
+		}
+		else {
 			myState = States.closet_door;
 			print (myState);
-		}					
+			isCloseToCloset = true;
+		}
+	}
+
+	public void CorridorReturnToCenter(){
+		if(hasOpenedCloset){
+			myState = States.corridor_2;
+			print (myState);
+		}
+		else {
+			myState = States.corridor_0;
+			print (myState);
+		}
+		isCloseToHairpin = false;
+		isCloseToCloset = false;
 
 	}
 
@@ -257,8 +331,7 @@ public class TextController : MonoBehaviour {
 			"Press R to return.";
 
 		if (Input.GetKeyDown(KeyCode.R)){
-			myState = States.corridor_0;
-			print (myState);
+			CorridorReturnToCenter ();
 		}					
 	}
 
@@ -298,9 +371,7 @@ public class TextController : MonoBehaviour {
 			print (myState);
 		}					
 		if (Input.GetKeyDown(KeyCode.C)){
-			myState = States.in_closet;
-			print (myState);
-			levelManager.LoadNextLevel ();
+			CorridorViewCloset ();
 
 		}					
 	}

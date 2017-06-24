@@ -31,4 +31,15 @@ public class InteractableObject : MonoBehaviour {
 	public void CellViewMirror(){
 		textController.CellViewMirror ();
 	}
+
+	public void CorridorViewStairs(){
+		textController.CorridorViewStairs ();
+	}
+	public void CorridorViewFloor(){
+		textController.CorridorViewFloor ();
+	}
+	public void CorridorViewCloset(){
+		textController.CorridorViewCloset ();
+	}
+
 }
