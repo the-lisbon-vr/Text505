@@ -33,7 +33,15 @@ public class TextController : MonoBehaviour {
 		}
 		if (SceneManager.GetActiveScene().buildIndex == 3){
 			print ("scene index: " + SceneManager.GetActiveScene ().buildIndex);
+			myState = States.in_closet;
+		}
+		if (SceneManager.GetActiveScene().buildIndex == 4){
+			print ("scene index: " + SceneManager.GetActiveScene ().buildIndex);
 			myState = States.corridor_3;
+		}
+		if (SceneManager.GetActiveScene().buildIndex == 5){
+			print ("scene index: " + SceneManager.GetActiveScene ().buildIndex);
+			myState = States.freedom;
 		}
 
 		print("state in start: " + myState);
@@ -265,6 +273,13 @@ public class TextController : MonoBehaviour {
 		if (myState == States.corridor_3){
 			myState = States.freedom;
 			print (myState);
+			levelManager.LoadNextLevel ();
+		}
+		else if (myState == States.in_closet){
+			myState = States.corridor_3;
+			print (myState);
+			levelManager.LoadNextLevel ();
+
 		}
 		else if(hasOpenedCloset){
 			myState = States.stairs_2;
@@ -295,12 +310,13 @@ public class TextController : MonoBehaviour {
 		if(hasOpenedCloset){
 			myState = States.corridor_3;
 			print (myState);
-			levelManager.LoadNextLevel ();
+
 		}
 		else if (isCloseToCloset && hasHairpin){
 			myState = States.in_closet;
 			print (myState);
 			hasOpenedCloset = true;
+			levelManager.LoadNextLevel ();
 
 		}
 		else {
@@ -441,8 +457,8 @@ public class TextController : MonoBehaviour {
 	}
 
 	void freedom(){
-		text.text = "You're free! Now run!\n\n" +
-			"Press P to play again.";
+		text.text = "Thank you for playing!\n\n" +
+			"by Diogo Farias Rodrigues";
 
 		if (Input.GetKeyDown(KeyCode.P)){
 			myState = States.cell;
