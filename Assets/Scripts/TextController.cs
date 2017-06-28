@@ -15,6 +15,8 @@ public class TextController : MonoBehaviour {
 	private States myState;
 	private LevelManager levelManager;
 
+	public GameObject destructableObject;
+
 	private bool canTakeMirror;
 	private bool hasMirror;
 	private bool hasUnlockedDoor;
@@ -111,10 +113,7 @@ public class TextController : MonoBehaviour {
 
 	#region State handler methods
 	void cell(){
-		text.text = "You are in a prison cell, you want to escape. There are " +
-			"some dirt sheets on the bed, a mirror on the wall and the " +
-			"door is locked from the outside.\n\n" +
-			"Press S to view sheets, M to view mirror and L to view lock.";
+		text.text = "Freedom is a state of mind.";
 
 		if (Input.GetKeyDown(KeyCode.S)){
 			myState = States.sheet_0;
@@ -131,8 +130,16 @@ public class TextController : MonoBehaviour {
 	}
 
 	public void CellViewSheets(){
-		myState = States.sheet_0;
-		print (myState);
+		if (myState == States.cell){
+			myState = States.sheet_0;
+			print (myState);
+			canTakeMirror = false;
+		}
+		else if(myState == States.cell_mirror){
+			myState = States.sheet_1;
+			print (myState);
+		}
+
 	}
 	public void CellViewLock(){
 		if(hasUnlockedDoor == true){
@@ -148,12 +155,14 @@ public class TextController : MonoBehaviour {
 			myState = States.lock_0;
 			print (myState);
 		}
+		canTakeMirror = false;
 	}
 	public void CellViewMirror(){
 		if(canTakeMirror == true){
 			myState = States.cell_mirror;
 			print (myState);
 			hasMirror = true;
+			Destroy(destructableObject);
 		}
 		else {
 			myState = States.mirror;
@@ -168,10 +177,9 @@ public class TextController : MonoBehaviour {
 
 
 	void sheet_0(){
-		text.text = "You can't believe you sleep in these things. Surely it's " +
-			"time somebody changed them. The pleasures of prison life " +
-			"I guess!\n\n" +
-			"Press R to return to roaming you cell.";
+		text.text = "I'm not sure I'll be able to enjoy a confortable bed " +
+			"when I get out. The pleasures of prison life " +
+			"I guess!";
 
 		if (Input.GetKeyDown(KeyCode.R)){
 			myState = States.cell;
@@ -181,8 +189,7 @@ public class TextController : MonoBehaviour {
 
 	void sheet_1(){
 		text.text = "Holding a mirror in your hand doesn't make " +
-			"your sheets look any better.\n\n" +
-			"Press R to return to roaming you cell.";
+			"your bed any more confortable.";
 
 		if (Input.GetKeyDown(KeyCode.R)){
 			myState = States.cell_mirror;
@@ -191,10 +198,9 @@ public class TextController : MonoBehaviour {
 	}
 
 	void mirror(){
-		text.text = "You whipe the dust off of the mirror. Your hair looks " +
-			"amazing today but now it's not the time to be looking " + 
-			"at yourself.\n\n" +
-			"Press T to take the mirror with you or R to return to roaming you cell.";
+		text.text = "You hair looks amazing in the mirror " +
+			"but now it's not the time to be looking " + 
+			"at yourself.";
 
 		if (Input.GetKeyDown(KeyCode.R)){
 			myState = States.cell;
@@ -208,9 +214,7 @@ public class TextController : MonoBehaviour {
 	}
 
 	void cell_mirror(){
-		text.text = "You've taken the mirror but now what? Try to think of a " +
-			"solution. Maybe you can use it to cut the sheets or...\n\n" +
-			"Press S to view sheets or L to view lock.";
+		text.text = "Let's see what I can do with this mirror.";
 
 		if (Input.GetKeyDown(KeyCode.S)){
 			myState = States.sheet_1;
@@ -223,10 +227,9 @@ public class TextController : MonoBehaviour {
 	}
 
 	void lock_0(){
-		text.text = "This is one of those button locks. You have no idea what the " +
-			"combination is. You wish you could somehow see where the dirty " +
-			"fingerprints were, maybe that would help.\n\n" +
-			"Press R to return to roaming you cell.";
+		text.text = "This is a code lock. If I could see the buttons maybe I could " +
+			"distinguish fingerprints. Then I just need to try a few combinations " +
+			"and get to the rigth one on time. Hopefully.";
 
 		if (Input.GetKeyDown(KeyCode.R)){
 			myState = States.cell;
@@ -235,10 +238,9 @@ public class TextController : MonoBehaviour {
 	}
 
 	void lock_1(){
-		text.text = "You carefully put the mirror between the bars and turn it round " +
-			"so you can see the lock. You can just make out fingerprints around " +
-			" the buttons. You press the dirty buttons and hear a click.\n\n" +
-			"Press O to open or R to return to roaming you cell.";
+		text.text = "I can can just make out fingerprints around " +
+			" the buttons. Now just give it a few tries to get the right " +
+			"combination...";
 
 		if (Input.GetKeyDown(KeyCode.R)){
 			myState = States.cell_mirror;
@@ -254,8 +256,7 @@ public class TextController : MonoBehaviour {
 	void corridor_0(){
 		text.text = "You are in a corridor. There are stairs to your left, " +
 			" there's something on the floor and there's a closet to your " +
-			"right. You hear people talking on the top of the stairs.\n\n" +
-			"Press S to view stairs, F to view floor and C to view closet.";
+			"right. You hear people talking on the top of the stairs.";
 
 		if (Input.GetKeyDown(KeyCode.S)){
 			CorridorViewStairs ();
@@ -275,10 +276,15 @@ public class TextController : MonoBehaviour {
 			print (myState);
 			levelManager.LoadNextLevel ();
 		}
-		else if (myState == States.in_closet){
+		else if (myState == States.corridor_2){
 			myState = States.corridor_3;
 			print (myState);
 			levelManager.LoadNextLevel ();
+
+		}
+		else if (myState == States.in_closet){
+			myState = States.stairs_2;
+			print (myState);
 
 		}
 		else if(hasOpenedCloset){
@@ -296,33 +302,41 @@ public class TextController : MonoBehaviour {
 
 	}
 	public void CorridorViewFloor(){
-		if(isCloseToHairpin){
+		if(myState == States.floor){
 			myState = States.corridor_1;
 			print (myState);
 			hasHairpin = true;
-		} else {
+			Destroy(destructableObject);
+		}
+		else {
 			myState = States.floor;
 			print (myState);
 			isCloseToHairpin = true;
 		}
 	}
 	public void CorridorViewCloset(){
-		if(hasOpenedCloset){
-			myState = States.corridor_3;
+		if(myState == States.in_closet || myState == States.stairs_2 ){
+			myState = States.corridor_2;
 			print (myState);
+			Destroy(destructableObject);
+
 
 		}
-		else if (isCloseToCloset && hasHairpin){
+		else if (myState == States.corridor_1){
 			myState = States.in_closet;
 			print (myState);
 			hasOpenedCloset = true;
 			levelManager.LoadNextLevel ();
 
 		}
-		else {
+		else if (myState == States.corridor_0){
 			myState = States.closet_door;
 			print (myState);
 			isCloseToCloset = true;
+		}
+		else {
+			myState = States.closet_door;
+			print (myState);
 		}
 	}
 
@@ -343,8 +357,7 @@ public class TextController : MonoBehaviour {
 	void stairs_0(){
 		text.text = "You get closer to the stairs to try and recognize the voices but " +
 			"the sound is too far away, you can't distinguish any words. It's probably "+
-			"guards and they are always armed. You decide not to risk it.\n\n" +
-			"Press R to return.";
+			"guards and they are always armed. You decide not to risk it.";
 
 		if (Input.GetKeyDown(KeyCode.R)){
 			CorridorReturnToCenter ();
@@ -353,8 +366,7 @@ public class TextController : MonoBehaviour {
 
 	void closet_door(){
 		text.text = "It's locked. It looks pretty easy to pick, if you " +
-			"only had your tools...\n\n" +
-			"Press R to return to roaming the corridor.";
+			"only had your tools...";
 
 		if (Input.GetKeyDown(KeyCode.R)){
 			myState = States.corridor_0;
@@ -364,8 +376,7 @@ public class TextController : MonoBehaviour {
 
 	void floor(){
 		text.text = "What's this here on the floor? Oh, " + 
-			"it's just a hairpin.\n\n" +
-			"Press H to take the hairpin or R to return.";
+			"it's just a hairpin.";
 
 		if (Input.GetKeyDown(KeyCode.H)){
 			myState = States.corridor_1;
@@ -379,8 +390,7 @@ public class TextController : MonoBehaviour {
 
 	void corridor_1(){
 		text.text = "The chatter coming from the top of the stairs seems to " + 
-			"be getting closer, you better take some action fast!\n\n" +
-			"Press S to view the stairs or C to view the closet.";
+			"be getting closer, you better take some action fast!";
 
 		if (Input.GetKeyDown(KeyCode.S)){
 			myState = States.stairs_1;
@@ -393,8 +403,7 @@ public class TextController : MonoBehaviour {
 	}
 
 	void stairs_1(){
-		text.text = "It's too risky, they're right here.\n\n" +
-			"Press R to return to roaming the corridor";
+		text.text = "It's too risky, they're right here.";
 
 		if (Input.GetKeyDown(KeyCode.R)){
 			myState = States.corridor_1;
@@ -404,8 +413,7 @@ public class TextController : MonoBehaviour {
 		
 	void in_closet(){
 		text.text = "The hairpin is perfect for this lock. You pick it and open the closet door. "+
-			" There's a cleaners uniform inside and nothing else.\n\n" +
-			"Press R to return to roaming the corridor or press D to dress the uniform.";
+			" There's a cleaners uniform inside and nothing else.";
 
 		if (Input.GetKeyDown(KeyCode.R)){
 			myState = States.corridor_2;
@@ -418,8 +426,7 @@ public class TextController : MonoBehaviour {
 	}
 
 	void corridor_2(){
-		text.text = "You can ear the guards now, they're getting down the stairs.\n\n" +
-			"Press S to view the stairs or C to view the closet.";
+		text.text = "You can ear the guards now, they're getting down the stairs.";
 
 		if (Input.GetKeyDown(KeyCode.S)){
 			myState = States.stairs_2;
@@ -433,8 +440,7 @@ public class TextController : MonoBehaviour {
 
 	void stairs_2(){
 		text.text = "You peek around and you can see them talking, just standing, " +
-			"at the top of the stairs. They will come down in few seconds and find you.\n\n" +
-			"Press R to return to roaming the corridor";
+			"at the top of the stairs. They will come down in few seconds and find you.";
 
 		if (Input.GetKeyDown(KeyCode.R)){
 			myState = States.corridor_2;
@@ -446,8 +452,7 @@ public class TextController : MonoBehaviour {
 		text.text = "They probably won't recognize you wearing this, afterall " +
 			"your old cell mate use to call you the janitor. That bastard he's " +
 			"been out for 12 years now. He probably got married and had...\n" +
-			"Stop daydreaming! They would have found your empty cell by now!\n\n" +
-			"Press S to view the stairs.";
+			"Stop daydreaming! They would have found your empty cell by now!";
 
 		if (Input.GetKeyDown(KeyCode.S)){
 			myState = States.freedom;
