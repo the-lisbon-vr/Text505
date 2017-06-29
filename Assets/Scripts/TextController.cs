@@ -282,7 +282,7 @@ public class TextController : MonoBehaviour {
 			levelManager.LoadNextLevel ();
 
 		}
-		else if (myState == States.in_closet){
+		else if (myState == States.in_closet || myState == States.stairs_2){
 			myState = States.stairs_2;
 			print (myState);
 
@@ -322,7 +322,7 @@ public class TextController : MonoBehaviour {
 
 
 		}
-		else if (myState == States.corridor_1){
+		else if (myState == States.corridor_1 || myState == States.stairs_1){
 			myState = States.in_closet;
 			print (myState);
 			hasOpenedCloset = true;

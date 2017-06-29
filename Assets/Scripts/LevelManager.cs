@@ -10,7 +10,7 @@ public class LevelManager : MonoBehaviour {
 	public Animator animator;
 
 	public void LoadLevel(string name){
-		SceneManager.LoadScene(name);
+		StartCoroutine (FadingToScene(name));
 	}
 
 	public void QuitGame(){
@@ -28,5 +28,11 @@ public class LevelManager : MonoBehaviour {
 		animator.SetBool ("Fade", true);
 		yield return new WaitUntil (() => black.color.a == 1);
 		SceneManager.LoadScene (SceneManager.GetActiveScene().buildIndex + 1);
+	}
+
+	IEnumerator FadingToScene(string name){
+		animator.SetBool ("Fade", true);
+		yield return new WaitUntil (() => black.color.a == 1);
+		SceneManager.LoadScene(name);
 	}
 }
