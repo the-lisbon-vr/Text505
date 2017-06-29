@@ -311,7 +311,7 @@ public class TextController : MonoBehaviour {
 			print (myState);
 			hasHairpin = true;
 			pickUpItemAudio.Play ();
-			Destroy(destructableObject);
+			Destroy(destructableObject, 0.7f);
 		}
 		else {
 			myState = States.floor;
@@ -324,7 +324,7 @@ public class TextController : MonoBehaviour {
 			myState = States.corridor_2;
 			print (myState);
 			pickUpItemAudio.Play ();
-			Destroy(destructableObject);
+			Destroy(destructableObject, 0.7f);
 
 
 		}
