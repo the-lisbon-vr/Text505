@@ -26,6 +26,8 @@ public class TextController : MonoBehaviour {
 	private bool hasOpenedCloset;
 //	public GameObject textGameObject;
 
+	private AudioSource pickUpItemAudio; 
+
 	// Use this for initialization
 	void Start () {
 		//		set initial state for each scene (scene 01 takes the first in the enum States):
@@ -46,6 +48,7 @@ public class TextController : MonoBehaviour {
 			myState = States.freedom;
 		}
 
+		pickUpItemAudio = GetComponent<AudioSource>(); 
 		print("state in start: " + myState);
 		levelManager = Object.FindObjectOfType<LevelManager> ();
 	}
@@ -162,7 +165,8 @@ public class TextController : MonoBehaviour {
 			myState = States.cell_mirror;
 			print (myState);
 			hasMirror = true;
-			Destroy(destructableObject);
+			pickUpItemAudio.Play ();
+			Destroy(destructableObject, 0.7f);
 		}
 		else {
 			myState = States.mirror;
@@ -306,6 +310,7 @@ public class TextController : MonoBehaviour {
 			myState = States.corridor_1;
 			print (myState);
 			hasHairpin = true;
+			pickUpItemAudio.Play ();
 			Destroy(destructableObject);
 		}
 		else {
@@ -318,6 +323,7 @@ public class TextController : MonoBehaviour {
 		if(myState == States.in_closet || myState == States.stairs_2 ){
 			myState = States.corridor_2;
 			print (myState);
+			pickUpItemAudio.Play ();
 			Destroy(destructableObject);
 
 
