@@ -1,0 +1,5 @@
+Text505:// Jail Break
+
+A VR escape room for the Google Cardboard where you have to escape you prison cell using objects you find. This is an adaptation of a text based game and it took me about 4 full days to make. It's a short experience (5 minutes) and it has some amazing voice acting done by me! xD
+
+Works on less expensive mobile devices. Play with head/earphones for a better experience.

@@ -26,7 +26,7 @@ public class TextController : MonoBehaviour {
 	private bool hasOpenedCloset;
 //	public GameObject textGameObject;
 
-	private AudioSource pickUpItemAudio; 
+	private AudioSource pickUpItemAudio;
 
 	// Use this for initialization
 	void Start () {
@@ -258,9 +258,7 @@ public class TextController : MonoBehaviour {
 	}
 
 	void corridor_0(){
-		text.text = "You are in a corridor. There are stairs to your left, " +
-			" there's something on the floor and there's a closet to your " +
-			"right. You hear people talking on the top of the stairs.";
+		text.text = "There are guards on top of these stairs. How are you going to get passed them?";
 
 		if (Input.GetKeyDown(KeyCode.S)){
 			CorridorViewStairs ();
@@ -382,7 +380,7 @@ public class TextController : MonoBehaviour {
 
 	void floor(){
 		text.text = "What's this here on the floor? Oh, " + 
-			"it's just a hairpin.";
+			"a key!.";
 
 		if (Input.GetKeyDown(KeyCode.H)){
 			myState = States.corridor_1;
@@ -395,8 +393,7 @@ public class TextController : MonoBehaviour {
 	}
 
 	void corridor_1(){
-		text.text = "The chatter coming from the top of the stairs seems to " + 
-			"be getting closer, you better take some action fast!";
+		text.text = "How is this key going to help you get past the guards?";
 
 		if (Input.GetKeyDown(KeyCode.S)){
 			myState = States.stairs_1;
@@ -418,8 +415,8 @@ public class TextController : MonoBehaviour {
 	}
 		
 	void in_closet(){
-		text.text = "The hairpin is perfect for this lock. You pick it and open the closet door. "+
-			" There's a cleaners uniform inside and nothing else.";
+		text.text = "The key fits! \n" +
+			"A cleaners uniform! Nice, I can work with that!";
 
 		if (Input.GetKeyDown(KeyCode.R)){
 			myState = States.corridor_2;
@@ -432,7 +429,8 @@ public class TextController : MonoBehaviour {
 	}
 
 	void corridor_2(){
-		text.text = "You can ear the guards now, they're getting down the stairs.";
+		text.text = "They probably won't recognize you wearing this...\n" +
+			"Right?";
 
 		if (Input.GetKeyDown(KeyCode.S)){
 			myState = States.stairs_2;
@@ -455,10 +453,8 @@ public class TextController : MonoBehaviour {
 	}
 
 	void corridor_3(){
-		text.text = "They probably won't recognize you wearing this, afterall " +
-			"your old cell mate use to call you the janitor. That bastard he's " +
-			"been out for 12 years now. He probably got married and had...\n" +
-			"Stop daydreaming! They would have found your empty cell by now!";
+		text.text = "Walk slowly.\n" +
+			"Act cool.";
 
 		if (Input.GetKeyDown(KeyCode.S)){
 			myState = States.freedom;
